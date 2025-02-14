@@ -1,6 +1,6 @@
 #include "LocalSearch.h" 
 
-void LocalSearch::run(Individual & indiv, double penaltyCapacityLS, double penaltyDurationLS)
+void LocalSearch::run(Individual & indiv, double penaltyCapacityLS, double penaltyDurationLS, int count)
 {
 	this->penaltyCapacityLS = penaltyCapacityLS;
 	this->penaltyDurationLS = penaltyDurationLS;
@@ -14,7 +14,7 @@ void LocalSearch::run(Individual & indiv, double penaltyCapacityLS, double penal
 			std::shuffle(params.correlatedVertices[i].begin(), params.correlatedVertices[i].end(), params.ran);
 
 	searchCompleted = false;
-	for (loopID = 0; !searchCompleted; loopID++)
+	for (loopID = 0; !searchCompleted && loopID<=count; loopID++)
 	{
 		if (loopID > 1) // Allows at least two loops since some moves involving empty routes are not checked at the first loop
 			searchCompleted = true;

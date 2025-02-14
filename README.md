@@ -1,6 +1,13 @@
 
 [![CI_Build](https://github.com/vidalt/HGS-CVRP/actions/workflows/CI_Build.yml/badge.svg?branch=main)](https://github.com/vidalt/HGS-CVRP/actions/workflows/CI_Build.yml)
 
+
+# About this fork
+
+This fork is a slightly modified version of the original HGS-CVRP code to use the SWAP* algorithm as a separate module. The modifications are credited to [DeepACO](https://github.com/henry-yeh/DeepACO/tree/main/cvrp_nls/HGS-CVRP-main).
+
+---
+
 # HGS-CVRP: A modern implementation of the Hybrid Genetic Search for the CVRP
 
 This is a modern implementation of the Hybrid Genetic Search (HGS) with Advanced Diversity Control of [1], specialized to the Capacitated Vehicle Routing Problem (CVRP).

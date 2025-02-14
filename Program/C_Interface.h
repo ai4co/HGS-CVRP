@@ -39,6 +39,14 @@ struct Solution *solve_cvrp_dist_mtx(
 #ifdef __cplusplus
 extern "C"
 #endif
+int local_search(
+	int n, double* x, double* y, double *dist_mtx, double *serv_time, double *dem,
+	double vehicleCapacity, double durationLimit, char isDurationConstraint,
+	int max_nbVeh, const struct AlgorithmParameters *ap, char verbose, int callid, int count);
+
+#ifdef __cplusplus
+extern "C"
+#endif
 void delete_solution(struct Solution * sol);
 
 

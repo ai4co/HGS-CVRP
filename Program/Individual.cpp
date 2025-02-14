@@ -66,16 +66,37 @@ Individual::Individual(Params & params, std::string fileName) : Individual(param
 			}
 			inputFile >> inputString;
 		}
-		if (inputString == "Cost") inputFile >> readCost;
-		else throw std::string("Unexpected token in input solution");
+		// if (inputString == "Cost") inputFile >> readCost;
+		// else throw std::string("Unexpected token in input solution");
 
 		// Some safety checks and printouts
 		evaluateCompleteCost(params);
 		if ((int)chromT.size() != params.nbClients) throw std::string("Input solution does not contain the correct number of clients");
 		if (!eval.isFeasible) throw std::string("Input solution is infeasible");
-		if (eval.penalizedCost != readCost)throw std::string("Input solution has a different cost than announced in the file");
-		if (params.verbose) std::cout << "----- INPUT SOLUTION HAS BEEN SUCCESSFULLY READ WITH COST " << eval.penalizedCost << std::endl;
+		// if (eval.penalizedCost != readCost)throw std::string("Input solution has a different cost than announced in the file");
+		if (params.verbose) std::cout << "----- INPUT SOLUTION HAS BEEN SUCCESSFULLY READ WITH COST " // << eval.penalizedCost 
+			<< std::endl;
 	}
 	else 
 		throw std::string("Impossible to open solution file provided in input in : " + fileName);
+}
+
+
+void Individual::exportCVRPLibFormat(std::string fileName)
+{
+	std::ofstream myfile(fileName);
+	if (myfile.is_open())
+	{
+		for (int k = 0; k < (int)chromR.size(); k++)
+		{
+			if (!chromR[k].empty())
+			{
+				myfile << "Route #" << k + 1 << ":"; // Route IDs start at 1 in the file format
+				for (int i : chromR[k]) myfile << " " << i;
+				myfile << std::endl;
+			}
+		}
+		myfile << "Cost " << eval.penalizedCost << std::endl;
+	}
+	else std::cout << "----- IMPOSSIBLE TO OPEN: " << fileName << std::endl;
 }

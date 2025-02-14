@@ -125,6 +125,52 @@ extern "C" Solution *solve_cvrp_dist_mtx(
 	return result;
 }
 
+extern "C" int local_search(
+	int n, double *x, double *y, double *dist_mtx, double *serv_time, double *dem,
+	double vehicleCapacity, double durationLimit, char isDurationConstraint,
+	int max_nbVeh, const AlgorithmParameters *ap, char verbose, int callid, int count)
+{
+	Solution *result;
+	std::vector<double> x_coords;
+	std::vector<double> y_coords;
+
+	try {
+		if (x != nullptr && y != nullptr) {
+			x_coords = {x, x + n};
+			y_coords = {y, y + n};
+		}
+
+		std::vector<double> service_time(serv_time, serv_time + n);
+		std::vector<double> demands(dem, dem + n);
+
+		std::vector<std::vector<double> > distance_matrix(n, std::vector<double>(n));
+		for (int i = 0; i < n; i++) { // row
+			for (int j = 0; j < n; j++) { // column
+				distance_matrix[i][j] = dist_mtx[n * i + j];
+			}
+		}
+
+		Params params(x_coords,y_coords,distance_matrix,service_time,demands,vehicleCapacity,durationLimit,max_nbVeh,isDurationConstraint,verbose,*ap);
+		
+		char buff[100] = {};
+  		snprintf(buff, sizeof(buff), "/tmp/route-%i", callid);
+		std::string path = buff;
+
+		Individual individual(params, path);
+		LocalSearch solver(params);
+		solver.run(individual, params.penaltyCapacity*10., params.penaltyDuration*10., count);
+
+		char buff2[100] = {};
+  		snprintf(buff2, sizeof(buff2), "/tmp/swapstar-result-%i", callid);
+		std::string returnpath = buff2;
+		individual.exportCVRPLibFormat(returnpath);
+	}
+	catch (const std::string &e) { std::cout << "EXCEPTION | " << e << std::endl; }
+	catch (const std::exception &e) { std::cout << "EXCEPTION | " << e.what() << std::endl; }
+
+	return 1;
+}
+
 extern "C" void delete_solution(Solution *sol)
 {
 	for (int i = 0; i < sol->n_routes; ++i)

@@ -178,7 +178,7 @@ private:
 	public:
 
 	// Run the local search with the specified penalty values
-	void run(Individual & indiv, double penaltyCapacityLS, double penaltyDurationLS);
+	void run(Individual & indiv, double penaltyCapacityLS, double penaltyDurationLS, int count=INT_MAX);
 
 	// Loading an initial solution into the local search
 	void loadIndividual(const Individual & indiv);
